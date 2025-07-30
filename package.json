@@ -6,6 +6,6 @@
   },
   "scripts": {
     "build": "cd server && npm install",
-    "start": "cd server && npm start"
+    "start": "cd server/src && npm start"
   }
 }
