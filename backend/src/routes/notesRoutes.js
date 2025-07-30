@@ -1,8 +1,6 @@
 import express from "express";
-<<<<<<< HEAD
-=======
+
 import checkJwt from "../middleware/auth.js";
->>>>>>> 884855a (New Features)
 import {
   createNote,
   deleteNote,
@@ -10,11 +8,7 @@ import {
   updateNote,
   getNoteById,
 } from "../controllers/notesController.js";
-<<<<<<< HEAD
 
-const router = express.Router();
-
-=======
 import rateLimiter from "../middleware/rateLimiter.js";
 
 const router = express.Router();
@@ -22,7 +16,6 @@ const router = express.Router();
 router.use(checkJwt);
 router.use(rateLimiter);
 
->>>>>>> 884855a (New Features)
 router.get("/", getAllNotes);
 
 router.get("/:id", getNoteById);

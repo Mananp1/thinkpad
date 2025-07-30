@@ -10,21 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "@auth0/auth0-react": "^2.4.0",
->>>>>>> 884855a (New Features)
     "axios": "^1.9.0",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
-<<<<<<< HEAD
-    "react-router": "^7.6.1"
-=======
     "react-router": "^7.6.1",
     "react-router-dom": "^7.7.1"
->>>>>>> 884855a (New Features)
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

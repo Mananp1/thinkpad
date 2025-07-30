@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-
-import notesRoutes from "./routes/notesRoutes.js";
-import { connectDB } from "./config/db.js";
-import rateLimiter from "./middleware/rateLimiter.js";
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 5001;
-
-app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
-app.use(rateLimiter);
-
-app.use("/api/notes", notesRoutes);
-
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log("Server started on PORT:", PORT);
-  });
-=======
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -45,7 +21,6 @@ app.use(
   })
 );
 
-// Auth0 error handling middleware
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     return res.status(401).json({ message: "Invalid token" });
@@ -67,5 +42,4 @@ app.get("*", (req, res) => {
 
 connectDB().then(() => {
   app.listen(PORT, () => console.log("Server started on PORT:", PORT));
->>>>>>> 884855a (New Features)
 });

@@ -18,11 +18,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
-<<<<<<< HEAD
-=======
+
     "express-jwt": "^8.5.1",
     "jwks-rsa": "^3.2.0",
->>>>>>> 884855a (New Features)
     "mongoose": "^8.14.3"
   },
   "devDependencies": {

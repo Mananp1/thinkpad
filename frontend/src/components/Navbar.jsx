@@ -1,14 +1,4 @@
-<<<<<<< HEAD
-import { PlusIcon } from "lucide-react";
-import React from "react";
-import { Link } from "react-router";
 
-const Navbar = () => {
-  return (
-    <header className="bg-secondary/10 border-b border-base-content/10">
-      <div className="mx-auto max-w-6xl px-4 p-4">
-        <div className="flex items-center justify-between">
-=======
 import { PlusIcon, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -57,19 +47,13 @@ const Navbar = ({ onSearchChange }) => {
     <header className="bg-secondary/10 border-b border-base-content/10">
       <div className="mx-auto max-w-6xl px-4 p-4">
         <div className="flex items-center justify-between gap-4">
->>>>>>> 884855a (New Features)
           <Link to={"/"}>
             <h1 className="text-3xl font-bold font-mono tracking-tight">
               ThinkPad
             </h1>
           </Link>
           <div className="flex items-center gap-4">
-<<<<<<< HEAD
-            <Link to={"/create"} className="btn btn-secondary">
-              <PlusIcon />
-              <span>New Note</span>
-            </Link>
-=======
+
             {isAuthenticated ? (
               <>
                 <div className="hidden md:flex items-center gap-2">
@@ -123,7 +107,6 @@ const Navbar = ({ onSearchChange }) => {
                 </button>
               </>
             )}
->>>>>>> 884855a (New Features)
           </div>
         </div>
       </div>

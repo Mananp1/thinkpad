@@ -10,14 +10,12 @@ const noteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-<<<<<<< HEAD
-=======
+
     userId: {
       type: String,
       required: true,
       index: true,
     },
->>>>>>> 884855a (New Features)
   },
   { timestamps: true }
 );

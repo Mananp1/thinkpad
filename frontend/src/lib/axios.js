@@ -1,11 +1,6 @@
 import axios from "axios";
 
 const api = axios.create({
-<<<<<<< HEAD
-  baseURL: "http://localhost:5001/api",
-});
-
-=======
   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
 });
 
@@ -31,5 +26,4 @@ api.interceptors.response.use(
   }
 );
 
->>>>>>> 884855a (New Features)
 export default api;

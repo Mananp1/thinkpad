@@ -1,18 +1,7 @@
 import { NotebookIcon } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
-<<<<<<< HEAD
 
-const NotesNotFound = () => {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 space-y-6 max-w-md mx-auto text-center">
-      <div className="bg-secondary/10 rounded-md p-8">
-        <NotebookIcon className="size-10"/>
-      </div>
-      <h3 className="text-2xl font-bold">No Notes yet</h3>
-      <p className="text-base-content/70">Ready to create you first note and organize?!</p>
-      <Link to={"/create"} className="btn btn-secondary">Creat Your first Note</Link>
-=======
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NotesNotFound = () => {
@@ -38,7 +27,6 @@ const NotesNotFound = () => {
           Log in
         </button>
       )}
->>>>>>> 884855a (New Features)
     </div>
   );
 };

@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-import { Route, Routes } from "react-router";
-import HomePage from "./pages/HomePage";
-import CreatePage from "./pages/CreatePage";
-import NoteDetailPage from "./pages/NoteDetailPage";
-// import toast from "react-hot-toast";
-
-const App = () => {
-  return (
-    <div data-theme="winter">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/create" element={<CreatePage />} />
-        <Route path="/notes/:id" element={<NoteDetailPage />} />
-      </Routes>
-    </div>
-=======
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -76,7 +58,6 @@ const App = () => {
         </Routes>
       </div>
     </TokenManager>
->>>>>>> 884855a (New Features)
   );
 };
 
