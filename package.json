@@ -5,7 +5,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "cd server && npm install",
-    "start": "cd server/src && npm start"
+    "build": "cd backend && npm install",
+    "start": "cd backend && npm start"
   }
 }
