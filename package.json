@@ -1,0 +1,11 @@
+{
+  "name": "thinkpad-monorepo",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "cd server && npm install",
+    "start": "cd server && npm start"
+  }
+}
