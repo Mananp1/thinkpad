@@ -4,9 +4,8 @@
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.js",
-    "build": "cd ../frontend && npm install && npm run build && cp -r dist ../backend/public",
-    "start": "node src/server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "type": "module",
   "keywords": [],
