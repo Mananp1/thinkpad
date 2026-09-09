@@ -1,33 +1,48 @@
-import { NotebookIcon } from "lucide-react";
-import React from "react";
 import { Link } from "react-router";
-
-import { useAuth0 } from "@auth0/auth0-react";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { MenuBook } from "@mui/icons-material";
+import { authClient } from "../lib/auth-client";
 
 const NotesNotFound = () => {
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { data: session } = authClient.useSession();
+
   return (
-    <div className="flex flex-col items-center justify-center py-16 space-y-6 max-w-md mx-auto text-center">
-      <div className="bg-secondary/10 rounded-md p-8">
-        <NotebookIcon className="size-10" />
-      </div>
-      <h3 className="text-2xl font-bold">No Notes yet</h3>
-      <p className="text-base-content/70">
-        Ready to create you first note and organize?!
-      </p>
-      {isAuthenticated ? (
-        <Link to={"/create"} className="btn btn-secondary">
-          Creat Your first Note
-        </Link>
+    <Stack
+      spacing={3}
+      sx={{
+        alignItems: "center",
+        textAlign: "center",
+        maxWidth: 448,
+        mx: "auto",
+        py: 8,
+      }}
+    >
+      <Box
+        sx={{
+          bgcolor: "rgba(70, 58, 162, 0.1)",
+          borderRadius: 2,
+          p: 4,
+          display: "flex",
+        }}
+      >
+        <MenuBook sx={{ fontSize: 40 }} />
+      </Box>
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>
+        No Notes yet
+      </Typography>
+      <Typography color="text.secondary">
+        Ready to create your first note and organize.
+      </Typography>
+      {session ? (
+        <Button component={Link} to="/create" color="secondary">
+          Create Your First Note
+        </Button>
       ) : (
-        <button
-          className="btn btn-secondary"
-          onClick={() => loginWithRedirect()}
-        >
+        <Button component={Link} to="/login" color="secondary">
           Log in
-        </button>
+        </Button>
       )}
-    </div>
+    </Stack>
   );
 };
 

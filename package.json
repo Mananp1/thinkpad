@@ -2,10 +2,11 @@
   "name": "thinkpad-monorepo",
   "private": true,
   "engines": {
-    "node": ">=18"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "build": "cd backend && npm install",
+    "build:web": "cd frontend && npm install && npm run build && rm -rf ../backend/public/assets && cp -r dist/. ../backend/public/",
     "start": "cd backend && npm start"
   }
 }

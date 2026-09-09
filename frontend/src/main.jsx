@@ -1,26 +1,26 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.jsx";
-import { Auth0Provider } from "@auth0/auth0-react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+import "@fontsource/roboto/latin-300.css";
+import "@fontsource/roboto/latin-400.css";
+import "@fontsource/roboto/latin-500.css";
+import "@fontsource/roboto/latin-700.css";
+
+import App from "./App.jsx";
+import theme from "./theme.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Auth0Provider
-        domain={import.meta.env.VITE_AUTH0_DOMAIN}
-        clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-        }}
-        cacheLocation="localstorage"
-      >
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <App />
-      </Auth0Provider>
-      <Toaster />
+        <Toaster />
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 );

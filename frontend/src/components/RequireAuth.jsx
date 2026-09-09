@@ -1,33 +1,34 @@
-import React, { useEffect, useRef } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useRef } from "react";
+import { Navigate, useLocation } from "react-router";
+import { Box, CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
+import { authClient } from "../lib/auth-client";
 
 const LoadingScreen = () => (
-  <div className="min-h-[50vh] grid place-content-center">
-    <span className="loading loading-ring loading-lg" />
-  </div>
+  <Box sx={{ minHeight: "50vh", display: "grid", placeContent: "center" }}>
+    <CircularProgress color="secondary" />
+  </Box>
 );
 
 const RequireAuth = ({
   children,
   loginMessage = "Please log in or sign up to create notes",
 }) => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { data: session, isPending } = authClient.useSession();
   const location = useLocation();
   const hasShownToast = useRef(false);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasShownToast.current) {
+    if (!isPending && !session && !hasShownToast.current) {
       hasShownToast.current = true;
       toast.error(loginMessage);
     }
-  }, [isLoading, isAuthenticated, loginMessage]);
+  }, [isPending, session, loginMessage]);
 
-  if (isLoading) return <LoadingScreen />;
+  if (isPending) return <LoadingScreen />;
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace state={{ from: location }} />;
+  if (!session) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return children;

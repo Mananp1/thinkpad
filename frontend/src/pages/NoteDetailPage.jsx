@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import api from "../lib/axios";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { ChevronLeft, Delete } from "@mui/icons-material";
 import toast from "react-hot-toast";
-import { ChevronLeft, LoaderIcon, Trash } from "lucide-react";
+import api from "../lib/axios";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
@@ -30,18 +40,24 @@ const NoteDetailPage = () => {
 
   if (loading || !note) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoaderIcon className="animate-spin size-10" />
-      </div>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress color="secondary" />
+      </Box>
     );
   }
 
-  const handleDelete = async (e, id) => {
-    e.preventDefault();
-    if (!window.confirm("Are you sure you wna tto delete this note?")) return;
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
-      await api.delete(`/notes/${id}`);
+      await api.delete(`/notes/${note._id}`);
       toast.success("Note deleted successfully!");
       navigate("/");
     } catch (error) {
@@ -57,7 +73,7 @@ const NoteDetailPage = () => {
     }
     setSaving(true);
     try {
-      await api.put(`notes/${id}`, note);
+      await api.put(`/notes/${id}`, note);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {
@@ -69,61 +85,54 @@ const NoteDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <Link to={"/"} className="btn btn-secondary">
-              <ChevronLeft className="h-5 w-5" />
-              Back to Notes
-            </Link>
-            <button
-              onClick={(e) => handleDelete(e, note._id)}
-              className="btn border-none bg-red-400 text-red-800 hover:bg-red-500 text-red-900"
-            >
-              <Trash className="h-5 w-5" />
-              Delete Note
-            </button>
-          </div>
-          <div className="card bg-secondary/10">
-            <div className="card-body">
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-title">Title</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered border-2"
-                  value={note.title}
-                  onChange={(e) => setNote({ ...note, title: e.target.value })}
-                />
-                <label className="label">
-                  <span className="label-title">Content</span>
-                </label>
-                <textarea
-                  placeholder="Write your note here..."
-                  className="textarea textarea-bordered border-2 h-32"
-                  value={note.content}
-                  onChange={(e) =>
-                    setNote({ ...note, content: e.target.value })
-                  }
-                />
-                <div className="card-actions justify-end mt-6">
-                  <button
-                    type="submit"
-                    className="btn btn-secondary"
-                    disabled={saving}
-                    onClick={handleSave}
-                  >
-                    {loading ? "Saving..." : "Save changes"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ minHeight: "100vh" }}>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 3,
+          }}
+        >
+          <Button
+            component={Link}
+            to="/"
+            color="secondary"
+            startIcon={<ChevronLeft />}
+          >
+            Back to Notes
+          </Button>
+          <Button color="error" startIcon={<Delete />} onClick={handleDelete}>
+            Delete Note
+          </Button>
+        </Stack>
+        <Card>
+          <CardContent>
+            <Stack spacing={2.5}>
+              <TextField
+                label="Title"
+                value={note.title}
+                onChange={(e) => setNote({ ...note, title: e.target.value })}
+              />
+              <TextField
+                label="Content"
+                placeholder="Write your note here..."
+                value={note.content}
+                onChange={(e) => setNote({ ...note, content: e.target.value })}
+                multiline
+                minRows={5}
+              />
+              <Stack direction="row" sx={{ justifyContent: "flex-end" }}>
+                <Button color="secondary" disabled={saving} onClick={handleSave}>
+                  {saving ? "Saving..." : "Save changes"}
+                </Button>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

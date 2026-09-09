@@ -1,25 +1,34 @@
-
-import { PlusIcon, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import {
+  AppBar,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Add, Close, Search } from "@mui/icons-material";
+import toast from "react-hot-toast";
+import { authClient } from "../lib/auth-client";
+import { monoFontFamily } from "../theme";
 
 const Navbar = ({ onSearchChange }) => {
   const [term, setTerm] = useState("");
-  const {
-    isLoading,
-    isAuthenticated,
-    error,
-    loginWithRedirect: login,
-    logout: auth0Logout,
-    user,
-  } = useAuth0();
+  const { data: session, isPending } = authClient.useSession();
+  const navigate = useNavigate();
 
-  const signup = () =>
-    login({ authorizationParams: { screen_hint: "signup" } });
+  const user = session?.user;
 
-  const logout = () =>
-    auth0Logout({ logoutParams: { returnTo: window.location.origin } });
+  const logout = async () => {
+    await authClient.signOut();
+    toast.success("Signed out");
+    navigate("/");
+  };
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -28,89 +37,99 @@ const Navbar = ({ onSearchChange }) => {
     return () => clearTimeout(id);
   }, [term, onSearchChange]);
 
-  if (isLoading) {
-    return (
-      <header className="bg-secondary/10 border-b border-base-content/10">
-        <div className="mx-auto max-w-6xl px-4 p-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold font-mono tracking-tight">
-              ThinkPad
-            </h1>
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-          </div>
-        </div>
-      </header>
-    );
-  }
-
   return (
-    <header className="bg-secondary/10 border-b border-base-content/10">
-      <div className="mx-auto max-w-6xl px-4 p-4">
-        <div className="flex items-center justify-between gap-4">
-          <Link to={"/"}>
-            <h1 className="text-3xl font-bold font-mono tracking-tight">
-              ThinkPad
-            </h1>
-          </Link>
-          <div className="flex items-center gap-4">
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        bgcolor: "rgba(70, 58, 162, 0.06)",
+        color: "text.primary",
+        borderBottom: 1,
+        borderColor: "divider",
+      }}
+    >
+      <Container maxWidth="lg">
+        <Toolbar
+          disableGutters
+          sx={{ gap: 2, justifyContent: "space-between", py: 1 }}
+        >
+          <Typography
+            component={Link}
+            to="/"
+            sx={{
+              fontFamily: monoFontFamily,
+              fontSize: "1.875rem",
+              fontWeight: 700,
+              letterSpacing: "-0.025em",
+              color: "text.primary",
+              textDecoration: "none",
+            }}
+          >
+            ThinkPad
+          </Typography>
 
-            {isAuthenticated ? (
-              <>
-                <div className="hidden md:flex items-center gap-2">
-                  <div className="join">
-                    <input
-                      value={term}
-                      onChange={(e) => setTerm(e.target.value)}
-                      className="input input-bordered join-item w-64"
-                      placeholder="Search notes by title…"
-                      aria-label="Search notes by title"
-                    />
-                    <button
-                      type="button"
-                      className="btn join-item btn-secondary"
-                      tabIndex={-1}
-                    >
-                      <Search className="w-4 h-4" />
-                    </button>
-                    {term && (
-                      <button
-                        type="button"
-                        className="btn join-item btn-outline hover:btn-ghost"
-                        onClick={() => setTerm("")}
-                      >
-                        Clear
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <Link to={"/create"} className="btn btn-secondary">
-                  <PlusIcon />
-                  <span>New Note</span>
-                </Link>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">{user?.email}</span>
-                  <button onClick={logout} className="btn btn-secondary">
-                    Logout
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {error && (
-                  <p className="text-red-500 text-sm">Error: {error.message}</p>
-                )}
-                <button onClick={signup} className="btn btn-secondary">
-                  Signup
-                </button>
-                <button onClick={login} className="btn btn-secondary">
-                  Login
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </header>
+          {isPending ? (
+            <CircularProgress size={24} color="secondary" />
+          ) : user ? (
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <TextField
+                value={term}
+                onChange={(e) => setTerm(e.target.value)}
+                placeholder="Search notes by title…"
+                aria-label="Search notes by title"
+                sx={{ width: 256, display: { xs: "none", md: "block" } }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Search fontSize="small" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: term ? (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          aria-label="Clear search"
+                          onClick={() => setTerm("")}
+                        >
+                          <Close fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ) : null,
+                  },
+                }}
+              />
+              <Button
+                component={Link}
+                to="/create"
+                color="secondary"
+                startIcon={<Add />}
+              >
+                New Note
+              </Button>
+              <Typography
+                variant="body2"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                {user.email}
+              </Typography>
+              <Button color="secondary" onClick={logout}>
+                Logout
+              </Button>
+            </Stack>
+          ) : (
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <Button component={Link} to="/signup" color="secondary">
+                Signup
+              </Button>
+              <Button component={Link} to="/login" color="secondary">
+                Login
+              </Button>
+            </Stack>
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

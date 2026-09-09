@@ -1,29 +1,10 @@
 import axios from "axios";
 
+// Better Auth authenticates with a session cookie, so requests just need to
+// carry credentials - there is no bearer token to attach by hand.
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
+  withCredentials: true,
 });
-
-api.interceptors.request.use(
-  async (config) => {
-    const token = localStorage.getItem("auth0_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 export default api;

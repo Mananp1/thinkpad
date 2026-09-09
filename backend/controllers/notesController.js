@@ -3,9 +3,9 @@ import Note from "../models/Note.js";
 export const getAllNotes = async (req, res) => {
   try {
 
-    if (!req.user?.sub)
+    if (!req.user?.id)
       return res.status(401).json({ message: "Unauthorized" });
-    const notes = await Note.find({ userId: req.user.sub }).sort({
+    const notes = await Note.find({ userId: req.user.id }).sort({
       createdAt: -1,
     });
     res.status(200).json(notes);
@@ -18,11 +18,11 @@ export const getAllNotes = async (req, res) => {
 export const getNoteById = async (req, res) => {
   try {
 
-    if (!req.user?.sub)
+    if (!req.user?.id)
       return res.status(401).json({ message: "Unauthorized" });
     const note = await Note.findOne({
       _id: req.params.id,
-      userId: req.user.sub,
+      userId: req.user.id,
     });
 
     if (!note) return res.status(404).json({ message: "Note not found!" });
@@ -36,13 +36,13 @@ export const getNoteById = async (req, res) => {
 export const createNote = async (req, res) => {
   try {
 
-    if (!req.user?.sub)
+    if (!req.user?.id)
       return res.status(401).json({ message: "Unauthorized" });
     const { title, content } = req.body;
     const note = new Note({
       title,
       content,
-      userId: req.user.sub,
+      userId: req.user.id,
     });
 
     const savedNote = await note.save();
@@ -56,13 +56,13 @@ export const createNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   try {
 
-    if (!req.user?.sub)
+    if (!req.user?.id)
       return res.status(401).json({ message: "Unauthorized" });
     const { title, content } = req.body;
     const updatedNote = await Note.findOneAndUpdate(
       {
         _id: req.params.id,
-        userId: req.user.sub,
+        userId: req.user.id,
       },
       { title, content },
       { new: true }
@@ -82,11 +82,11 @@ export const updateNote = async (req, res) => {
 export const deleteNote = async (req, res) => {
   try {
 
-    if (!req.user?.sub)
+    if (!req.user?.id)
       return res.status(401).json({ message: "Unauthorized" });
     const deletedNote = await Note.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user.sub,
+      userId: req.user.id,
     });
 
     if (!deletedNote)

@@ -1,6 +1,6 @@
 import express from "express";
 
-import checkJwt from "../middleware/auth.js";
+import requireAuth from "../middleware/auth.js";
 import {
   createNote,
   deleteNote,
@@ -9,12 +9,9 @@ import {
   getNoteById,
 } from "../controllers/notesController.js";
 
-import rateLimiter from "../middleware/rateLimiter.js";
-
 const router = express.Router();
 
-router.use(checkJwt);
-router.use(rateLimiter);
+router.use(requireAuth);
 
 router.get("/", getAllNotes);
 

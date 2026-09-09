@@ -1,7 +1,17 @@
-import { ChevronLeft } from "lucide-react";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { ChevronLeft } from "@mui/icons-material";
+import toast from "react-hot-toast";
 import api from "../lib/axios";
 
 const CreatePage = () => {
@@ -11,25 +21,22 @@ const CreatePage = () => {
 
   const navigate = useNavigate();
 
-  const handleSumbit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      toast.error("All fields are requied");
+      toast.error("All fields are required");
       return;
     }
     setLoading(true);
     try {
-      await api.post("/notes", {
-        title,
-        content,
-      });
+      await api.post("/notes", { title, content });
       toast.success("Note Created Successfully!");
       navigate("/");
     } catch (error) {
       console.log("Error creating note", error);
       if (error.response?.status === 429) {
         toast.error("Slow Down! You are creating notes too fast!", {
-          duration: "4000",
+          duration: 4000,
           icon: "☠",
         });
       } else {
@@ -39,55 +46,51 @@ const CreatePage = () => {
       setLoading(false);
     }
   };
+
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <Link to={"/"} className="btn btn-secondary mb-4">
-            <ChevronLeft />
-            Back to Notes
-          </Link>
-          <div className="card bg-secondary/10 border-solid border-secondary/20 border-2">
-            <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">Create New Note</h2>
-              <form onSubmit={handleSumbit}>
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-title">Title</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Note Title"
-                    className="input input-bordered border-2"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <label className="label">
-                    <span className="label-title">Content</span>
-                  </label>
-                  <textarea
-                    type="text"
-                    placeholder="Write your note here..."
-                    className="textarea textarea-bordered border-2 h-32"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                </div>
-                <div className="card-actions justify-end">
-                  <button
-                    type="submit"
-                    className="btn btn-secondary"
-                    disabled={loading}
-                  >
+    <Box sx={{ minHeight: "100vh" }}>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Button
+          component={Link}
+          to="/"
+          color="secondary"
+          startIcon={<ChevronLeft />}
+          sx={{ mb: 2 }}
+        >
+          Back to Notes
+        </Button>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
+              Create New Note
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit}>
+              <Stack spacing={2.5} sx={{ mt: 2 }}>
+                <TextField
+                  label="Title"
+                  placeholder="Note Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                  label="Content"
+                  placeholder="Write your note here..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  multiline
+                  minRows={5}
+                />
+                <Stack direction="row" sx={{ justifyContent: "flex-end" }}>
+                  <Button type="submit" color="secondary" disabled={loading}>
                     {loading ? "Creating..." : "Create Note"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                  </Button>
+                </Stack>
+              </Stack>
+            </Box>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

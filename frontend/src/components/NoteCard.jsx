@@ -1,45 +1,89 @@
-import { Pencil, Trash } from "lucide-react";
-import React from "react";
 import { Link } from "react-router";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import toast from "react-hot-toast";
 import { formatDate } from "../lib/utils";
 import api from "../lib/axios";
-import toast from "react-hot-toast";
 
 const NoteCard = ({ note, setNotes }) => {
-  const handleDelete = async (e, id) => {
-    e.preventDefault();
-    if (!window.confirm("Are you sure you wna tto delete this note?")) return;
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
       await api.delete(`/notes/${id}`);
-      setNotes((prev) => prev.filter((note) => note._id !== id));
+      setNotes((prev) => prev.filter((n) => n._id !== id));
       toast.success("Note deleted successfully!");
     } catch (error) {
       console.log("Error deleting note", error);
       toast.error("Error deleting Note!");
     }
   };
-  return (
-    <Link
-      to={`/notes/${note._id}`}
-      className="card bg-secondary/10 border-solid border-secondary/20 border-2"
-    >
-      <div className="card-body">
-        <h3 className="card-title text-base-content">{note.title}</h3>
-        <p className="text-base-content/70 line-clamp-3">{note.content}</p>
-        <div className="card-actions justify-between items-center text-sm text-base-content/60">
-          <span>{formatDate(new Date(note.createdAt))}</span>
-          <div className="flex items-center gap-1">
-            <Pencil className="bg-secondary/35 rounded p-2 w-9 h-9 hover:bg-secondary/45" />
 
-            <Trash
-              className="bg-red-400 text-red-800 rounded p-2 w-9 h-9 hover:bg-red-500 text-red-900"
-              onClick={(e) => handleDelete(e, note._id)}
-            />
-          </div>
-        </div>
-      </div>
-    </Link>
+  return (
+    <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <CardActionArea
+        component={Link}
+        to={`/notes/${note._id}`}
+        sx={{ flexGrow: 1 }}
+      >
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            {note.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {note.content}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: 2,
+          pb: 1.5,
+        }}
+      >
+        <Typography variant="caption" color="text.secondary">
+          {formatDate(new Date(note.createdAt))}
+        </Typography>
+        <Stack direction="row" spacing={0.5}>
+          <IconButton
+            component={Link}
+            to={`/notes/${note._id}`}
+            size="small"
+            color="secondary"
+            aria-label="Edit note"
+          >
+            <Edit fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            color="error"
+            aria-label="Delete note"
+            onClick={() => handleDelete(note._id)}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Stack>
+      </Stack>
+    </Card>
   );
 };
 

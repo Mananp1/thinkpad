@@ -1,17 +1,22 @@
-import { expressjwt as jwt } from "express-jwt";
-import jwksRsa from "jwks-rsa";
+import { fromNodeHeaders } from "better-auth/node";
+import { auth } from "../lib/auth.js";
 
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
-  }),
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ["RS256"],
-  requestProperty: "user",
-});
+// Resolves the Better Auth session cookie and puts the user on the request.
+export default async function requireAuth(req, res, next) {
+  try {
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
 
-export default checkJwt;
+    if (!session) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    req.user = session.user;
+    req.session = session.session;
+    return next();
+  } catch (error) {
+    console.error("Error resolving session", error);
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}
