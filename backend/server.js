@@ -15,6 +15,13 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Dokploy puts Traefik in front of this container, so honour X-Forwarded-*
+// headers for protocol detection. Only in production: trusting these when not
+// actually behind a proxy would let clients spoof them.
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",

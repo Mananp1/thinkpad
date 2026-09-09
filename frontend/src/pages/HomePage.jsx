@@ -2,14 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
-import RateLimitedUI from "../components/RateLimitedUI";
 import NoteCard from "../components/NoteCard";
 import NotesNotFound from "../components/NotesNotFound";
 import api from "../lib/axios";
 import { authClient } from "../lib/auth-client";
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
@@ -35,12 +33,10 @@ const HomePage = () => {
         const res = await api.get("/notes");
         if (cancelled) return;
         setNotes(res.data);
-        setIsRateLimited(false);
       } catch (error) {
         if (cancelled) return;
         console.error("Error fetching notes", error);
-        if (error.response?.status === 429) setIsRateLimited(true);
-        else if (error.response?.status === 401) {
+        if (error.response?.status === 401) {
           toast.error("Please log in to view notes");
         } else {
           toast.error("Failed to load notes");
@@ -69,7 +65,6 @@ const HomePage = () => {
   return (
     <Box sx={{ minHeight: "100vh" }}>
       <Navbar onSearchChange={setQuery} />
-      {isRateLimited && <RateLimitedUI />}
 
       <Container maxWidth="xl" sx={{ py: 4 }}>
         {showLoading && (
@@ -78,11 +73,9 @@ const HomePage = () => {
           </Box>
         )}
 
-        {!showLoading && filteredNotes.length === 0 && !isRateLimited && (
-          <NotesNotFound />
-        )}
+        {!showLoading && filteredNotes.length === 0 && <NotesNotFound />}
 
-        {filteredNotes.length > 0 && !isRateLimited && (
+        {filteredNotes.length > 0 && (
           <Box
             sx={{
               display: "grid",
