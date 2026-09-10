@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import toast from "react-hot-toast";
 import { authClient } from "../lib/auth-client";
-import { monoFontFamily } from "../theme";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -54,7 +53,6 @@ const LoginPage = () => {
             component={Link}
             to="/"
             sx={{
-              fontFamily: monoFontFamily,
               fontSize: "1.875rem",
               fontWeight: 700,
               letterSpacing: "-0.025em",
@@ -73,6 +71,7 @@ const LoginPage = () => {
               <Box component="form" onSubmit={handleSubmit}>
                 <Stack spacing={2.5} sx={{ mt: 2 }}>
                   <TextField
+                    fullWidth
                     label="Email"
                     type="email"
                     autoComplete="email"
@@ -80,13 +79,14 @@ const LoginPage = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
+                    fullWidth
                     label="Password"
                     type="password"
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button type="submit" color="secondary" disabled={loading}>
+                  <Button type="submit" disabled={loading}>
                     {loading ? "Logging in..." : "Log in"}
                   </Button>
                   <Typography variant="body2" sx={{ textAlign: "center" }}>

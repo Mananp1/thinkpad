@@ -8,6 +8,8 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
 import { connectDB } from "./config/db.js";
 import notesRoutes from "./routes/notesRoutes.js";
+import notebooksRoutes from "./routes/notebooksRoutes.js";
+import tagsRoutes from "./routes/tagsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,6 +38,8 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
 
 app.use("/api/notes", notesRoutes);
+app.use("/api/notebooks", notebooksRoutes);
+app.use("/api/tags", tagsRoutes);
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "Server is running" });

@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import toast from "react-hot-toast";
 import { authClient } from "../lib/auth-client";
-import { monoFontFamily } from "../theme";
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -60,7 +59,6 @@ const SignupPage = () => {
             component={Link}
             to="/"
             sx={{
-              fontFamily: monoFontFamily,
               fontSize: "1.875rem",
               fontWeight: 700,
               letterSpacing: "-0.025em",
@@ -79,12 +77,14 @@ const SignupPage = () => {
               <Box component="form" onSubmit={handleSubmit}>
                 <Stack spacing={2.5} sx={{ mt: 2 }}>
                   <TextField
+                    fullWidth
                     label="Name"
                     autoComplete="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                   <TextField
+                    fullWidth
                     label="Email"
                     type="email"
                     autoComplete="email"
@@ -92,6 +92,7 @@ const SignupPage = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
+                    fullWidth
                     label="Password"
                     type="password"
                     autoComplete="new-password"
@@ -99,7 +100,7 @@ const SignupPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button type="submit" color="secondary" disabled={loading}>
+                  <Button type="submit" disabled={loading}>
                     {loading ? "Creating account..." : "Sign up"}
                   </Button>
                   <Typography variant="body2" sx={{ textAlign: "center" }}>

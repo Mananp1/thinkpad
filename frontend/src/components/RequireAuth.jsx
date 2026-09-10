@@ -6,7 +6,7 @@ import { authClient } from "../lib/auth-client";
 
 const LoadingScreen = () => (
   <Box sx={{ minHeight: "50vh", display: "grid", placeContent: "center" }}>
-    <CircularProgress color="secondary" />
+    <CircularProgress />
   </Box>
 );
 

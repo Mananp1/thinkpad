@@ -1,0 +1,12 @@
+import express from "express";
+
+import requireAuth from "../middleware/auth.js";
+import { getAllTags } from "../controllers/tagsController.js";
+
+const router = express.Router();
+
+router.use(requireAuth);
+
+router.get("/", getAllTags);
+
+export default router;
